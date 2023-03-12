@@ -1,0 +1,30 @@
+version: "3.4"
+
+networks:
+  eventa:
+
+services:
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      args:
+        - GIT_TOKEN=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
+      dockerfile: MicroServicesDocker\Dockerfile_Identity
+    depends_on:
+      - demoappdb
+    environment:
+      - DB_HOST=demoappdb
+      - DB_NAME=Identity
+      - DB_SA_PASSWORD=password@12345#
+    networks:
+      - eventa
+
+  demoappdb:
+    container_name: app-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 8002:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=password@12345#
