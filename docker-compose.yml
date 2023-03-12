@@ -9,7 +9,7 @@ services:
     build:
       context: .
       args:
-        - GIT_TOKEN=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
+        - GIT_TOKEN=
       dockerfile: MicroServicesDocker\Dockerfile_Identity
     depends_on:
       - demoappdb
