@@ -1,0 +1,38 @@
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+
+RUN sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf
+RUN sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1/g' /etc/ssl/openssl.cnf
+RUN sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /usr/lib/ssl/openssl.cnf
+RUN sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1/g' /usr/lib/ssl/openssl.cnf
+
+# Creating image
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
+# Defining args for reading from docker-compose file
+ARG GIT_TOKEN
+# Defining environment variables
+ENV PROJECT_NAME EventAreaMicroservices
+ENV GIT_TOKEN "$GIT_TOKEN"
+ENV GIT_DOMAIN github.com
+ENV GIT_PROJECT_PATH ShukaQA/$PROJECT_NAME.git
+ENV GIT_REPO=https://$GIT_TOKEN@$GIT_DOMAIN/$GIT_PROJECT_PATH
+
+# Creating working directory
+WORKDIR /src
+# Cloning project repository
+RUN git clone $GIT_REPO
+
+WORKDIR "/src/EventAreaMicroservices/APIGateway"
+RUN dotnet restore "APIGateway.csproj"
+
+WORKDIR "/src/EventAreaMicroservices/APIGateway"
+RUN dotnet build "APIGateway.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "APIGateway.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "APIGateway.dll"]

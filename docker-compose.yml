@@ -1,16 +1,19 @@
 version: "3.4"
 
 networks:
-  eventa:
+  eventarea:
 
 services:
   identity.api:
-    image: ${DOCKER_REGISTRY-}identityapi
+    image: identityapi
+    container_name: identityapi-container
     build:
       context: .
       args:
         - GIT_TOKEN=
       dockerfile: MicroServicesDocker\Dockerfile_Identity
+    ports:
+      - 7160:80
     depends_on:
       - demoappdb
     environment:
@@ -18,7 +21,20 @@ services:
       - DB_NAME=Identity
       - DB_SA_PASSWORD=password@12345#
     networks:
-      - eventa
+      - eventarea
+
+  apigateway:
+    image: apigateway
+    container_name: apigateway-container
+    build:
+      context: .
+      args:
+        - GIT_TOKEN=
+      dockerfile: MicroServicesDocker\Dockerfile_Gateway
+    ports:
+      - 7094:80
+    networks:
+      - eventarea
 
   demoappdb:
     container_name: app-db
@@ -28,3 +44,5 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=password@12345#
+    networks:
+      - eventarea
