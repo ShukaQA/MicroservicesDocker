@@ -10,7 +10,7 @@ services:
     build:
       context: .
       args:
-        - GIT_TOKEN=
+        - GIT_TOKEN=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
       dockerfile: MicroServicesDocker\Dockerfile_Identity
     ports:
       - 7160:80
@@ -29,7 +29,7 @@ services:
     build:
       context: .
       args:
-        - GIT_TOKEN=
+        - GIT_TOKEN=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
       dockerfile: MicroServicesDocker\Dockerfile_Gateway
     ports:
       - 7094:80
