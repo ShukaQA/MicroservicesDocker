@@ -8,7 +8,7 @@ services:
     ports:
       - "80"
     volumes:
-      - C:\Users\Admin\Desktop\Secrets:/root/.microsoft/usersecrets/4c699f64-aea7-452f-b78c-adec71eaaeab
+      - /Users/akeb8/Desktop/Secrets:/root/.microsoft/usersecrets/4c699f64-aea7-452f-b78c-adec71eaaeab
   apigateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -16,4 +16,4 @@ services:
     ports:
       - "80"
     volumes:
-      - C:\Users\Admin\Desktop\Secrets:/root/.microsoft/usersecrets/4c699f64-aea7-452f-b78c-adec71eaaeab
+      - /Users/akeb8/Desktop/Secrets:/root/.microsoft/usersecrets/4c699f64-aea7-452f-b78c-adec71eaaeab
