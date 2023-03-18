@@ -10,7 +10,7 @@ services:
     build:
       context: .
       args:
-        - GIT_TOKEN=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
+        - GIT_TOKEN=
       dockerfile: MicroServicesDocker\Dockerfile_Identity
     ports:
       - 7160:80
@@ -29,10 +29,29 @@ services:
     build:
       context: .
       args:
-        - GIT_TOKEN=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
+        - GIT_TOKEN=
       dockerfile: MicroServicesDocker\Dockerfile_Gateway
     ports:
       - 7094:80
+    networks:
+      - eventarea
+
+  event:
+    image: eventapi
+    container_name: eventapi-container
+    build:
+      context: .
+      args:
+        - GIT_TOKEN=
+      dockerfile: MicroServicesDocker\Dockerfile_Event
+    ports:
+      - 7207:80
+    depends_on:
+      - demoappdb
+    environment:
+      - DB_HOST=demoappdb
+      - DB_NAME=Identity
+      - DB_SA_PASSWORD=password@12345#
     networks:
       - eventarea
 

@@ -8,7 +8,19 @@ services:
     ports:
       - "80"
     volumes:
-      - /Users/akeb8/Desktop/Secrets:/root/.microsoft/usersecrets/4c699f64-aea7-452f-b78c-adec71eaaeab
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https
+      - C:/Users/Admin/Desktop/Secrets:/root/.microsoft/usersecrets/4c699f64-aea7-452f-b78c-adec71eaaeab
+  event:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https
+      - C:/Users/Admin/Desktop/Secrets:/root/.microsoft/usersecrets/dcc01903-a9ca-477f-b5f4-553a8cc51382
   apigateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -16,4 +28,5 @@ services:
     ports:
       - "80"
     volumes:
-      - /Users/akeb8/Desktop/Secrets:/root/.microsoft/usersecrets/4c699f64-aea7-452f-b78c-adec71eaaeab
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https
